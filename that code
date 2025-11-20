@@ -1,0 +1,75 @@
+ct=['아프리카', '아메리카', '아시아','유럽', '오세아니아']
+earth=[20.2,28.4,29.9,6.8,5.7]
+fp=[317,967,1613,632,47]#억톤
+rk=[0,1,2,3,4]
+pp=[40,7.4,3.7,6.5,13]#억
+ifbee= 1
+year=0
+#tmp=1-(year*5/100)
+cuf=[0.0,0.0,0.0,0.0,0.0]
+log=[]
+logg=[]
+world=str()
+help=[]
+k=0.644 #상수,톤
+u=0.45
+
+def rank(): #bubble sort
+    x=0
+    z=0
+    while x< 4:
+        if cuf[rk[x]]<cuf[rk[x+1]]:
+           rk[x]=z
+           rk[x]=rk[x+1]
+           rk[x+1]=z
+        x+=1
+
+def turn(ctn):
+    global year
+    global world
+    global u
+    if ifbee==1:
+       u*= year/100
+       if u<0.45*0.2:
+          u=0.09
+    while year < 10:
+        for ctn in range(0,5):
+         cuf[ctn]+= fp[ctn]*(1-year*earth[ctn]/100)*u
+       #    print(currentfood[ctn])
+         if cuf[ctn] >= pp[ctn]*k:
+             world=world+'0'
+             cuf[ctn]= cuf[ctn]-pp[ctn]*k
+             rank()
+         else:
+            world=world+'1'
+            rank()
+            #help.append('{},{}서 {}로 {}'.format(year, ct[rk[0]], ct[ctn], pp[ctn]*k))
+            cuf[rk[0]]-= pp[ctn]*k
+            cuf[ctn]=0
+         #print("*-*-*-*-")
+         log.append(str(cuf))
+         print('year {}'.format(year))
+         print(ct[ctn])
+         print(cuf)
+         print(world)
+         
+        year+=1
+        logg.append(world)
+        world=''
+        
+    
+
+turn(0)
+
+f=open('data','w+')
+for i in range(len(log)):
+    f.write(str(log[i]))
+    f.write('\n')
+
+for i in range(len(help)):
+   f.write(str(help[0]))
+   f.write('\n')
+
+for i in range(len(logg)):
+   f.write(logg[i])
+   f.write('\n')

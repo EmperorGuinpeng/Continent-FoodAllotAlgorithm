@@ -1,0 +1,99 @@
+ct=['아프리카', '아메리카', '아시아','유럽', '오세아니아']
+earth=[20.2,28.4,29.9,6.8,5.7]
+fp=[1047060000, 2626020000, 4996850000, 1078880000, 135150000]#톤
+rk=[0,1,2,3,4]
+pp=[15.4,10.6,49.8,7.4,0.5]#억
+ifbee= 1
+year=1
+tmp=1
+fac=1
+facamount=1000000 #톤
+cuf=[0,0,0,0,0]
+log=[]
+logg=[]
+world=str()
+#help=[]
+k=0.35 #상수,인당 연간 곡물 소비량 평균(톤)
+u=0.41 #전체 곡물 생산 중 인간 식량의 비중
+
+def rank(): #bubble sort
+    
+    for i in range(len(cuf)):
+       for j in range(len(cuf)-1):
+          if cuf[rk[j]]<cuf[rk[j+1]]:
+             rk[j], rk[j+1] = rk[j+1], rk[j]
+             
+
+def Fac(ctn):
+   rank()
+   a = cuf[rk[0]]
+   if a >= 2*facamount+pp[ctn]*k:
+         cuf[rk[0]] -= 2*facamount
+         cuf[rk[3]] += facamount
+         cuf[rk[4]] += facamount
+         #for i in range(3,5):
+         #   cuf[rk[i]] += facamount
+
+def turn(ctn):
+    global year
+    global world
+    b=0
+    while year < 100:
+        l=u
+        
+        if tmp==1:
+           l *= 1-year*earth[ctn]/1000
+        if ifbee==1:
+           b= 1-year/100
+           if b<0.2:
+              b=0.2
+           l *=b
+        for ctn in range(0,5):
+         cuf[ctn]+= fp[ctn]*l
+       #    print(currentfood[ctn])
+         if cuf[ctn] >= pp[ctn]*k*100000000:
+             world=world+'0'
+             cuf[ctn]= cuf[ctn]-pp[ctn]*k*100000000
+             rank()
+             
+         else:
+            world=world+'1'
+            rank()
+            #help.append('{},{}서 {}로 {}'.format(year, ct[rk[0]], ct[ctn], pp[ctn]*k))
+            cuf[rk[0]]-= pp[ctn]*k
+            cuf[ctn]=0
+         #print("*-*-*-*-")
+         log.append(str(cuf))
+         print('year {}'.format(year))
+         #print(ct[ctn])
+         #print(cuf)
+         print(world)
+         print(rk)
+         #pp[ctn]=round(pp[ctn]*101/100)
+         #print(pp[ctn])
+         
+        year+=1
+        logg.append(world)
+        if fac==1:
+           Fac(ctn)
+           log.append('FAC'+str(cuf))
+        world=''
+        if cuf[0]+cuf[1]+cuf[2]+cuf[3]+cuf[4] <= 0:
+           break
+        
+    
+
+turn(0)
+
+f=open('data','w+')
+for i in range(len(log)):
+    f.write(str(log[i]))
+    f.write('\n')
+
+for i in range(len(help)):
+   f.write(str(help[0]))
+   f.write('\n')
+
+for i in range(len(logg)):
+   f.write(logg[i]+str(i))
+   f.write('\n')
